@@ -32,6 +32,7 @@ public class TBJMap extends Tool {
         System.out.println("    -heap\tto print java heap summary");
         System.out.println("    -heap:format=b\tto dump java heap in hprof binary format");
         System.out.println("    -histo\tto print histogram of java object heap");
+        System.out.println("    -survivorhisto\tto print survivor histogram of java object heap");
         System.out.println("    -oldhisto\tto print oldgen histogram of java object heap");
         System.out.println("    -permhisto\tto print permgen histogram of java object heap");
         System.out.println("    -permstat\tto print permanent generation statistics");
@@ -48,6 +49,7 @@ public class TBJMap extends Tool {
     public static final int MODE_FINALIZERINFO = 6;
     public static final int MODE_OLD_HISTOGRAM = 7;
     public static final int MODE_PERM_HISTOGRAM = 8;
+    public static final int MODE_SURVIVOR_HISTOGRAM = 9;
 
     public void run() {
         Tool tool = null;
@@ -92,6 +94,12 @@ public class TBJMap extends Tool {
                 permTools.setDebugeeType(getDebugeeType());
                 permTools.printPerm();
                 return;
+            case MODE_SURVIVOR_HISTOGRAM:
+                TBObjectHistogramTool survivorTool = new TBObjectHistogramTool();
+                survivorTool.setAgent(getAgent());
+                survivorTool.setDebugeeType(getDebugeeType());
+                survivorTool.printSurvivor();
+                return;
             default:
                 usage();
                 break;
@@ -111,6 +119,8 @@ public class TBJMap extends Tool {
                 mode = MODE_HEAP_SUMMARY;
             } else if (modeFlag.equals("-histo")) {
                 mode = MODE_HISTOGRAM;
+            } else if (modeFlag.equals("-survivorhisto")) {
+                mode = MODE_SURVIVOR_HISTOGRAM;
             } else if (modeFlag.equals("-oldhisto")) {
                 mode = MODE_OLD_HISTOGRAM;
             } else if (modeFlag.equals("-permhisto")) {
